@@ -1,0 +1,17 @@
+{
+  "name": "p_web295-ouvrages",
+  "version": "1.0.0",
+  "description": "Réaliser le backend d'une application permettant de partager sa passion pour la lecture.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/app.mjs"
+  },
+  "author": "Cardis Yohan | Napoleone Cyril | Velickovic Mateja | Zeqiri Amir",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
