@@ -1,7 +1,7 @@
 // Import.s
 import express from "express";
 import { booksRouter } from "../routes/books.mjs";
-import { sequelize } from "./db/sequelize.mjs";
+import { sequelize } from "../db/sequelize.mjs";
 
 // Application declaration
 const app = express();
