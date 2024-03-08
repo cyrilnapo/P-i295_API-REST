@@ -54,5 +54,36 @@ booksRouter.get("/:id/notes", (req, res) => {
   res.json(alert(message, roundedAverage));
 });
 
+booksRouter.post("/:id/comments", (req, res) => {
+  const bookId = req.params.id;
+
+  const commentData = {
+    content: req.body.content,
+  };
+
+  Comment.create(commentData)
+    .then((createdComment) => {
+      return Book.findByPk(bookId, { include: Comment });
+    })
+    .then((bookWithComments) => {
+      if (!bookWithComments) {
+        const message =
+          "Le livre demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
+        return res.status(404).json({ message });
+      }
+
+      return bookWithComments.addComment(createdComment);
+    })
+    .then(() => {
+      const message = `Le commentaire a bien été ajouté au livre ${bookWithComments.booTitle} !`;
+      res.json(success(message, createdComment));
+    })
+    .catch((error) => {
+      const message =
+        "Une erreur est survenue. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
+    });
+});
+
 // Export.s
 export { booksRouter };
