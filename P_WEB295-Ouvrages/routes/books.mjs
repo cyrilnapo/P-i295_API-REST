@@ -54,6 +54,32 @@ booksRouter.get("/:id/notes", (req, res) => {
   res.json(alert(message, roundedAverage));
 });
 
+
+booksRouter.post("/", async (req, res) => {
+  try {
+    const bookData = {
+      booTitle: req.body.booTitle,
+      booNbPages: req.body.booNbPages,
+      // Ajoutez d'autres champs selon votre modèle
+      booImagecover: req.body.booImagecover,
+    };
+
+    const createdBook = await Book.create(bookData);
+
+    const message = `Le livre ${createdBook.booTitle} a bien été créé !`;
+    res.json(success(message, createdBook));
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      const message = error.errors.map((e) => e.message).join(", ");
+      return res.status(400).json({ message, data: error });
+    }
+
+    const message =
+      "Le livre n'a pas pu être ajouté. Merci de réessayer dans quelques instants.";
+    res.status(500).json({ message, data: error });
+  }
+});
+
 booksRouter.post("/:id/comments", (req, res) => {
   const bookId = req.params.id;
 
