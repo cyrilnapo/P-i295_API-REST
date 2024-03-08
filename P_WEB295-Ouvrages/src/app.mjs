@@ -1,7 +1,7 @@
 // Import.s
 import express from "express";
+import sequelize from "../db/sequelize.mjs";
 import { booksRouter } from "../routes/books.mjs";
-import { sequelize } from "../db/sequelize.mjs";
 
 // Application declaration
 const app = express();
@@ -22,3 +22,12 @@ sequelize
     console.log("La connexion à la base de données a bien été établie")
   )
   .catch((error) => console.error("Impossible de se connecter à la DB"));
+
+sequelize
+  .sync()
+  .then(() => {
+    console.log("La base de données à été syncronisée");
+  })
+  .catch((error) => {
+    console.error("Error La base de données n'à pas été syncronisée:", error);
+  });

@@ -5,4 +5,4 @@ const sequelize = new Sequelize("db_PWEB295", "root", "root", {
   dialect: "mysql",
   logging: false,
 });
-export { sequelize };
+export default sequelize;

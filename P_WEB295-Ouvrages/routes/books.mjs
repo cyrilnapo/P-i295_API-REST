@@ -2,7 +2,7 @@
 import express from "express";
 import { books } from "../models/mock-books.mjs";
 import { alert } from "./alert.mjs";
-
+import { Comment } from "../models/mock-comments.mjs";
 const booksRouter = express();
 
 // Recovery of all books
@@ -54,13 +54,11 @@ booksRouter.get("/:id/notes", (req, res) => {
   res.json(alert(message, roundedAverage));
 });
 
-
 booksRouter.post("/", async (req, res) => {
   try {
     const bookData = {
       booTitle: req.body.booTitle,
       booNbPages: req.body.booNbPages,
-      // Ajoutez d'autres champs selon votre modèle
       booImagecover: req.body.booImagecover,
     };
 
@@ -80,28 +78,39 @@ booksRouter.post("/", async (req, res) => {
   }
 });
 
+let bookWithComments;
+
 booksRouter.post("/:id/comments", (req, res) => {
   const bookId = req.params.id;
+
+  // Check if the content is provided in the request
+  if (!req.body.content) {
+    const message = "Le contenu du commentaire est requis.";
+    return res.status(400).json({ message });
+  }
 
   const commentData = {
     content: req.body.content,
   };
 
+  let createdComment; // Declare the variable outside the scope
+
   Comment.create(commentData)
-    .then((createdComment) => {
-      return Book.findByPk(bookId, { include: Comment });
+    .then((comment) => {
+      createdComment = comment; // Assign the value to the outer variable
+      return Book.findByPk(bookId);
     })
-    .then((bookWithComments) => {
-      if (!bookWithComments) {
+    .then((book) => {
+      if (!book) {
         const message =
           "Le livre demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
         return res.status(404).json({ message });
       }
 
-      return bookWithComments.addComment(createdComment);
+      return book.addComment(createdComment);
     })
     .then(() => {
-      const message = `Le commentaire a bien été ajouté au livre ${bookWithComments.booTitle} !`;
+      const message = `Le commentaire a bien été ajouté au livre ${createdComment.booTitle} !`;
       res.json(success(message, createdComment));
     })
     .catch((error) => {

@@ -1,24 +1,33 @@
-// Mock data on comments
-let comments = [
-  {
-    commentId: 1,
-    comment: "",
-    fkUser: 1,
-    fkBook: 1,
-  },
-  {
-    commentId: 2,
-    comment: "",
-    fkUser: 2,
-    fkBook: 2,
-  },
-  {
-    commentId: 3,
-    comment: "",
-    fkUser: 3,
-    fkBook: 3,
-  },
-];
+import { DataTypes } from "sequelize";
+import sequelize from "../db/sequelize.mjs";
 
-// Export.s
-export { comments };
+const Comment = sequelize.define(
+  "Comment",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    tableName: "comments",
+  }
+);
+
+export { Comment };
