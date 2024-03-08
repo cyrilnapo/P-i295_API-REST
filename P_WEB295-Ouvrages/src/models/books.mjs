@@ -184,6 +184,15 @@ const userModel = (sequelize, DataTypes) => {
           },
         },
       },
+      bookId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "t_Role",
+          key: "idRole",
+        },
+        onDelete: "CASCADE",
+      },
     },
     {
       timestamps: true,
@@ -193,6 +202,6 @@ const userModel = (sequelize, DataTypes) => {
   );
 };
 
-module.exports = userModel;
+userModel;
 
-export { bookModel };
+export { bookModel, userModel };
