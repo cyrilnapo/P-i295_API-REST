@@ -44,5 +44,5 @@ let books = [
   },
 ];
 
-// Export.s
+// Export
 export { books };
